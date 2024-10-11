@@ -1,0 +1,151 @@
+version: '3'
+name: mongo-sharding-repl
+
+services:
+  pymongo-api:
+    container_name: pymongo-api
+    restart: always
+    build: 
+      context: services/api_app
+      dockerfile: Dockerfile
+    image: kazhem/pymongo_api:1.0.0
+    depends_on:
+      - mongo-router
+      - redis01-master      
+    ports:
+      - 8080:8080
+    environment:
+      MONGODB_URL: "mongodb://mongo-router"
+      MONGODB_DATABASE_NAME: "somedb"
+      #REDIS_URL: "redis://redis01-master:6379"      
+
+## mongo-router
+  mongo-router:
+    image: mongo:latest
+    container_name: mongo-router
+    command: mongos --port 27017 --configdb mongo-conf-srv/mongo-conf-srv:27017 --bind_ip_all
+    ports:
+      - "27117:27017"
+    restart: always
+    volumes:
+      - ./scripts:/scripts
+      - mongo-router-db:/data/db
+      - mongo-router-config:/data/configdb
+    depends_on:
+      - mongo-conf-srv
+      - mongo-shard01-master
+      - mongo-shard01-slave01
+      - mongo-shard01-slave02
+      - mongo-shard02-master
+      - mongo-shard02-slave01
+      - mongo-shard02-slave02
+
+# mongo-conf-srv
+  mongo-conf-srv:
+    image: mongo:latest
+    container_name: mongo-conf-srv
+    command: mongod --port 27017 --bind_ip_all --configsvr --replSet mongo-conf-srv
+    volumes:
+      - ./scripts:/scripts
+      - mongo-conf-srv-db:/data/db
+      - mongo-conf-srv-config:/data/configdb
+    restart: always
+    links:
+      - mongo-shard01-master
+      - mongo-shard02-master
+## mongo-shard01
+  mongo-shard01-master:
+    image: mongo:latest
+    container_name: mongo-shard01-master
+    command: mongod --port 27017 --bind_ip_all --shardsvr --replSet mongo-shard01
+    volumes:
+      - ./scripts:/scripts
+      - mongo-shard01-master-db:/data/db
+      - mongo-shard01-master-config:/data/configdb
+    restart: always
+    links:
+      - mongo-shard01-slave01
+      - mongo-shard01-slave02
+  mongo-shard01-slave01:
+    image: mongo:latest
+    container_name: mongo-shard01-slave01
+    command: mongod --port 27017 --bind_ip_all --shardsvr --replSet mongo-shard01
+    volumes:
+      - ./scripts:/scripts
+      - mongo-shard01-slave01-db:/data/db
+      - mongo-shard01-slave01-config:/data/configdb
+    restart: always
+  mongo-shard01-slave02:
+    image: mongo:latest
+    container_name: mongo-shard01-slave02
+    command: mongod --port 27017 --bind_ip_all --shardsvr --replSet mongo-shard01
+    volumes:
+      - ./scripts:/scripts
+      - mongo-shard01-slave02-db:/data/db
+      - mongo-shard01-slave02-config:/data/configdb
+    restart: always
+# mongo-shard02
+  mongo-shard02-master:
+    image: mongo:latest
+    container_name: mongo-shard02-master
+    command: mongod --port 27017 --bind_ip_all --shardsvr --replSet mongo-shard02
+    volumes:
+      - ./scripts:/scripts
+      - mongo-shard02-master-db:/data/db
+      - mongo-shard02-master-config:/data/configdb
+    restart: always
+    links:
+      - mongo-shard02-slave01
+      - mongo-shard02-slave02
+  mongo-shard02-slave01:
+    image: mongo:latest
+    container_name: mongo-shard02-slave01
+    command: mongod --port 27017 --bind_ip_all --shardsvr --replSet mongo-shard02
+    volumes:
+      - ./scripts:/scripts
+      - mongo-shard02-slave01-db:/data/db
+      - mongo-shard02-slave01-config:/data/configdb
+    restart: always
+  mongo-shard02-slave02:
+    image: mongo:latest
+    container_name: mongo-shard02-slave02
+    command: mongod --port 27017 --bind_ip_all --shardsvr --replSet mongo-shard02
+    volumes:
+      - ./scripts:/scripts
+      - mongo-shard02-slave02-db:/data/db
+      - mongo-shard02-slave02-config:/data/configdb
+    restart: always
+##redis-instance01
+  redis01-master:
+    image: redis:latest
+    container_name: redis01-master
+    volumes:
+      - redis01-master:/data
+  redis01-slave:
+    image: redis:latest
+    container_name: redis01-slave
+    volumes:
+      - redis01-slave:/data
+    depends_on:
+      - redis01-master
+    command: redis-server --slaveof redis01-master 6379
+  
+volumes:
+  mongo-router-db:
+  mongo-router-config:
+  mongo-conf-srv-db:
+  mongo-conf-srv-config:
+  mongo-shard01-master-db:
+  mongo-shard01-master-config:
+  mongo-shard01-slave01-db:
+  mongo-shard01-slave01-config:
+  mongo-shard01-slave02-db:
+  mongo-shard01-slave02-config:
+  mongo-shard02-master-db:
+  mongo-shard02-master-config:
+  mongo-shard02-slave01-db:
+  mongo-shard02-slave01-config:
+  mongo-shard02-slave02-db:
+  mongo-shard02-slave02-config:
+  redis01-master:
+  redis01-slave:

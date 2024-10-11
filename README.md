@@ -1,35 +1,122 @@
-# pymongo-api
+# Задание 1
+    
+Схема с заданием (1): [draw.io](https://github.com/grm000/architecture-sprint-2/blob/sprint-2/architecture-sprint-2-task-1-r-galeev.drawio)
 
-## Как запустить
 
-Запускаем mongodb и приложение
+# Задание 2
 
-```shell
-docker compose up -d
+1. Из "mongo-sharding" выполнить команду развёртывания кластера и инициализировать окружение
+
+### WINDOWS
+
+``` 
+docker compose up -d && ^
+timeout /t 5 && ^
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
+```
+### LINUX
+
+``` 
+docker-compose up -d && \
+sleep 5 && \
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && \
+sleep 2 && \
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && \
+sleep 2 && \
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && \
+sleep 2 && \
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
 
-Заполняем mongodb данными
-
-```shell
-./scripts/mongo-init.sh
+2. Очистить ресурсы.
+```
+docker compose down -v
 ```
 
-## Как проверить
+# Задание 3
 
-### Если вы запускаете проект на локальной машине
+1. Из "mongo-sharding-repl" выполнить команду развёртывания кластера и инициализировать окружение
 
-Откройте в браузере http://localhost:8080
+### WINDOWS
 
-### Если вы запускаете проект на предоставленной виртуальной машине
+``` 
+docker compose up -d && ^
+timeout /t 5 && ^
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
+```
+### LINUX
 
-Узнать белый ip виртуальной машины
-
-```shell
-curl --silent http://ifconfig.me
+``` 
+docker-compose up -d && \
+sleep 5 && \
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && \
+sleep 2 && \
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && \
+sleep 2 && \
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && \
+sleep 2 && \
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
 
-Откройте в браузере http://<ip виртуальной машины>:8080
+2. Очистить ресурсы.
 
-## Доступные эндпоинты
+```
+docker compose down -v
+```
 
-Список доступных эндпоинтов, swagger http://<ip виртуальной машины>:8080/docs
+# Задание 4
+
+1. Из "sharding-repl-cache" выполнить команду развёртывания кластера и инициализировать окружение
+
+### WINDOWS
+
+``` 
+docker compose up -d && ^
+timeout /t 5 && ^
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && ^
+timeout /t 2 && ^
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
+```
+### LINUX
+
+``` 
+docker-compose up -d && \
+sleep 5 && \
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && \
+sleep 2 && \
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && \
+sleep 2 && \
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && \
+sleep 2 && \
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
+```
+
+2. Очистить ресурсы.
+
+```
+docker compose down -v
+```
+
+# Задание 5
+
+Схема с заданием (5): [draw.io](https://github.com/grm000/architecture-sprint-2/blob/sprint-2/architecture-sprint-2-task-5-r-galeev.drawio)
+
+# Задание 6
+       
+Схема с заданием (6): [draw.io](https://github.com/grm000/architecture-sprint-2/blob/sprint-2/architecture-sprint-2-task-6-r-galeev.drawio)
