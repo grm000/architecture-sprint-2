@@ -1,5 +1,8 @@
 # Задание 1
+    
     Схема с заданием: [draw.io](https://github.com/grm000/architecture-sprint-2/blob/sprint-2/architecture-sprint-2-task-1-r-galeev.drawio)
+
+
 # Задание 2
 
 1. Из "mongo-sharding" выполнить команду развёртывания кластера и инициализировать окружение
@@ -9,25 +12,26 @@
 ```shell 
 docker compose up -d && ^
 timeout /t 5 && ^
-docker-compose exec -i config_srv sh -c "mongosh --port 27017 < /scripts/init-mongo-config_srv.js" && ^
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i shard1a sh -c "mongosh --port 27018 < /scripts/init-mongo-shard1a.js" && ^
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i shard2a sh -c "mongosh --port 27019 < /scripts/init-mongo-shard2a.js" && ^
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i mongos_router sh -c "mongosh --port 27020 < /scripts/init-mongo-mongos_router.js"
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
 ### LINUX
+
 ```shell 
 docker compose up -d && /
-timeout /t 5 && /
-docker-compose exec -i config_srv sh -c "mongosh --port 27017 < /scripts/init-mongo-config_srv.js" && /
-timeout /t 2 && /
-docker-compose exec -i shard1a sh -c "mongosh --port 27018 < /scripts/init-mongo-shard1a.js" && /
-timeout /t 2 && /
-docker-compose exec -i shard2a sh -c "mongosh --port 27019 < /scripts/init-mongo-shard2a.js" && /
-timeout /t 2 && /
-docker-compose exec -i mongos_router sh -c "mongosh --port 27020 < /scripts/init-mongo-mongos_router.js"
+sleep 5 && /
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && /
+sleep 2 && /
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && /
+sleep 2 && /
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && /
+sleep 2 && /
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
 
 2. Очистить ресурсы.
@@ -44,25 +48,26 @@ docker compose down -v
 ```shell 
 docker compose up -d && ^
 timeout /t 5 && ^
-docker-compose exec -i config_srv sh -c "mongosh --port 27017 < /scripts/init-mongo-config_srv.js" && ^
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i shard1a sh -c "mongosh --port 27018 < /scripts/init-mongo-shard1a.js" && ^
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i shard2a sh -c "mongosh --port 27019 < /scripts/init-mongo-shard2a.js" && ^
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i mongos_router sh -c "mongosh --port 27020 < /scripts/init-mongo-mongos_router.js"
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
 ### LINUX
+
 ```shell 
 docker compose up -d && /
-timeout /t 5 && /
-docker-compose exec -i config_srv sh -c "mongosh --port 27017 < /scripts/init-mongo-config_srv.js" && /
-timeout /t 2 && /
-docker-compose exec -i shard1a sh -c "mongosh --port 27018 < /scripts/init-mongo-shard1a.js" && /
-timeout /t 2 && /
-docker-compose exec -i shard2a sh -c "mongosh --port 27019 < /scripts/init-mongo-shard2a.js" && /
-timeout /t 2 && /
-docker-compose exec -i mongos_router sh -c "mongosh --port 27020 < /scripts/init-mongo-mongos_router.js"
+sleep 5 && /
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && /
+sleep 2 && /
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && /
+sleep 2 && /
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && /
+sleep 2 && /
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
 
 2. Очистить ресурсы.
@@ -80,26 +85,26 @@ docker compose down -v
 ```shell 
 docker compose up -d && ^
 timeout /t 5 && ^
-docker-compose exec -i config_srv sh -c "mongosh --port 27017 < /scripts/init-mongo-config_srv.js" && ^
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i shard1a sh -c "mongosh --port 27018 < /scripts/init-mongo-shard1a.js" && ^
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i shard2a sh -c "mongosh --port 27019 < /scripts/init-mongo-shard2a.js" && ^
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && ^
 timeout /t 2 && ^
-docker-compose exec -i mongos_router sh -c "mongosh --port 27020 < /scripts/init-mongo-mongos_router.js"
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
-
 ### LINUX
+
 ```shell 
 docker compose up -d && /
-timeout /t 5 && /
-docker-compose exec -i config_srv sh -c "mongosh --port 27017 < /scripts/init-mongo-config_srv.js" && /
-timeout /t 2 && /
-docker-compose exec -i shard1a sh -c "mongosh --port 27018 < /scripts/init-mongo-shard1a.js" && /
-timeout /t 2 && /
-docker-compose exec -i shard2a sh -c "mongosh --port 27019 < /scripts/init-mongo-shard2a.js" && /
-timeout /t 2 && /
-docker-compose exec -i mongos_router sh -c "mongosh --port 27020 < /scripts/init-mongo-mongos_router.js"
+sleep 5 && /
+docker-compose exec mongo-conf-srv sh -c "mongosh < /scripts/init-mongo-conf-srv.js" && /
+sleep 2 && /
+docker-compose exec mongo-shard01-master sh -c "mongosh < /scripts/init-mongo-shard01.js" && /
+sleep 2 && /
+docker-compose exec mongo-shard02-master sh -c "mongosh < /scripts/init-mongo-shard02.js" && /
+sleep 2 && /
+docker-compose exec mongo-router sh -c "mongosh < /scripts/init-mongo-router.js"
 ```
 
 2. Очистить ресурсы.
@@ -107,7 +112,11 @@ docker-compose exec -i mongos_router sh -c "mongosh --port 27020 < /scripts/init
 ```shell
 docker compose down -v
 ```
+
 # Задание 5
+
     Схема с заданием: [draw.io](https://github.com/grm000/architecture-sprint-2/blob/sprint-2/architecture-sprint-2-task-5-r-galeev.drawio)
+
 # Задание 6
+
     Схема с заданием: [draw.io](https://github.com/grm000/architecture-sprint-2/blob/sprint-2/architecture-sprint-2-task-6-r-galeev.drawio)
